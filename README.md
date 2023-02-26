@@ -1,1 +1,1 @@
-# -Programare-concurenta-si-distribuita
+# Programare-concurenta-si-distribuita
