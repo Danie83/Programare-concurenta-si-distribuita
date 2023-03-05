@@ -1,4 +1,14 @@
 import socket
+from configparser import ConfigParser
+
+config_object = ConfigParser()
+config_object.rea("config.ini")
+
+MESSAGE_SIZE_SELECTION = int(config_object["APPLICATIONSETUP"]["message_size_selection"])
+MESSAGE_SIZES = config_object["APPLICATIONSETUP"]["message_sizes"].split(" ")
+MESSAGE_SIZES = [int(x) for x in MESSAGE_SIZES]
+
+CURRENT_MESSAGE_SIZE = MESSAGE_SIZES[MESSAGE_SIZE_SELECTION]
 
 # create a socket, get the local host, and connect
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -11,7 +21,7 @@ while True:
     client_socket.send(client_message.encode())
 
     # the server response to the message sent by the client
-    server_response = client_socket.recv(1024)
+    server_response = client_socket.recv(CURRENT_MESSAGE_SIZE)
     print("Server response: %s" % server_response.decode())
 
     # a way for the client to stop messaging (testing)

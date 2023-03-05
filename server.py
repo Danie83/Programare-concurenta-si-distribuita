@@ -1,5 +1,15 @@
 import socket
 import threading
+from configparser import ConfigParser
+
+config_object = ConfigParser()
+config_object.rea("config.ini")
+
+MESSAGE_SIZE_SELECTION = int(config_object["APPLICATIONSETUP"]["message_size_selection"])
+MESSAGE_SIZES = config_object["APPLICATIONSETUP"]["message_sizes"].split(" ")
+MESSAGE_SIZES = [int(x) for x in MESSAGE_SIZES]
+
+CURRENT_MESSAGE_SIZE = MESSAGE_SIZES[MESSAGE_SIZE_SELECTION]
 
 # create a socket, get the local host, and connect
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,7 +22,7 @@ server_socket.listen(5)
 # method for handling the client message
 def handle_client(client_socket, address):
     while True:
-        client_message = client_socket.recv(1024)
+        client_message = client_socket.recv(CURRENT_MESSAGE_SIZE)
 
         if not client_message:
             break
