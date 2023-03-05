@@ -40,14 +40,15 @@ def handle_client(client_socket, address):
 
         if not client_data:
             break
-        message_counter -= -1
-        bytes_read_counter -= -len(client_data)
+        message_counter += 1
+        bytes_read_counter += len(client_data)
 
     # closing the connection
     print("Closing connection: %s" % str(address))
     client_socket.close()
     end = time.time()
     elapsed_time = end - start
+    print("Protocol used: %s" % PROTOCOL_TYPE)
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter)
     print("Total elapsed time: %d ms" % elapsed_time)

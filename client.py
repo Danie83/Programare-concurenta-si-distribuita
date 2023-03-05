@@ -18,15 +18,25 @@ def tcp():
     client_socket.connect((host, 65432))
 
     with open("byte_file", "rb") as f:
+        elapsed, message_counter, bytes_sent_coutner = 0, 0, 0
         while True:
             # send chunk of data to the server
+            start = time.time()
             data_chunk = f.read(CURRENT_MESSAGE_SIZE)
             if not data_chunk:
                 break
             client_socket.send(data_chunk)
+            end = time.time()
+            elapsed += end - start
+            message_counter += 1
+            bytes_sent_coutner += len(data_chunk)
 
         # closing the connection
         client_socket.close()
+        print("Connection terminated.")
+        print("Total transamission time: %d" % elapsed)
+        print("Message counter: %d" % message_counter)
+        print("Bytes counter: %d" % bytes_sent_coutner)
 
 if __name__ == '__main__':
     tcp()
