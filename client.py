@@ -18,7 +18,7 @@ def tcp():
     client_socket.connect((host, 65432))
 
     with open("byte_file", "rb") as f:
-        elapsed, message_counter, bytes_sent_coutner = 0, 0, 0
+        elapsed, message_counter, bytes_sent_counter = 0, 0, 0
         while True:
             # send chunk of data to the server
             start = time.time()
@@ -29,14 +29,14 @@ def tcp():
             end = time.time()
             elapsed += end - start
             message_counter += 1
-            bytes_sent_coutner += len(data_chunk)
+            bytes_sent_counter += len(data_chunk)
 
         # closing the connection
         client_socket.close()
         print("Connection terminated.")
         print("Total transamission time: %d" % elapsed)
         print("Message counter: %d" % message_counter)
-        print("Bytes counter: %d" % bytes_sent_coutner)
+        print("Bytes counter: %d" % bytes_sent_counter)
 
 def udp():
     # create a socket, get the local host, and bind
@@ -44,8 +44,8 @@ def udp():
     host = socket.gethostname()
     client_socket.bind((host, 65432))
 
-    elapsed = 0
     with open("byte_file", "rb") as f:
+        elapsed, message_counter, bytes_sent_counter = 0, 0, 0
         while True:
             # send chunk of data to the server
             start = time.time()
@@ -54,10 +54,15 @@ def udp():
                 break
             client_socket.sendto(data_chunk, (host, 65430))
             end = time.time()
+            message_counter += 1
+            bytes_sent_counter += len(data_chunk)
             elapsed += end - start
             ACK, _ = client_socket.recvfrom(CURRENT_MESSAGE_SIZE)
         
-        print("done")
+        print("Finished sening data.")
+        print("Transmission time: %d" % elapsed)
+        print("Messages count: %d" % message_counter)
+        print("Bytes sent: %d" % bytes_sent_counter)
         client_socket.sendto("stop".encode(), (host, 65430))
         client_socket.close()
 

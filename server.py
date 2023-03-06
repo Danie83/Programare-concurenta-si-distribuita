@@ -59,12 +59,18 @@ def udp():
     host = socket.gethostname()
     server_socket.bind((host, 65430))
 
+    message_counter, bytes_read_counter = 0, 0
     while True:
         data, address = server_socket.recvfrom(CURRENT_MESSAGE_SIZE)
         if not data or (len(data) == 4 and data.decode() == "stop"):
             break
+        message_counter += 1
+        bytes_read_counter += len(data)
         server_socket.sendto("test".encode(), address)
-    print("Closing connection:")
+
+    print("Protocol used: %s" % PROTOCOL_TYPE)
+    print("Messages Counter: %d" % message_counter)
+    print("Bytes Counter: %d" % bytes_read_counter) # includes "stop"
 
 if __name__ == '__main__':
     udp()
