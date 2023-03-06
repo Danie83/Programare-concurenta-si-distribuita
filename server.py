@@ -53,6 +53,18 @@ def handle_client(client_socket, address):
     print("Bytes Counter: %d" % bytes_read_counter)
     print("Total elapsed time: %d ms" % elapsed_time)
 
+def udp():
+    # create a socket using the config protocol, get the local host, and bind
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host = socket.gethostname()
+    server_socket.bind((host, 65430))
+
+    while True:
+        data, address = server_socket.recvfrom(CURRENT_MESSAGE_SIZE)
+        if not data or (len(data) == 4 and data.decode() == "stop"):
+            break
+        server_socket.sendto("test".encode(), address)
+    print("Closing connection:")
 
 if __name__ == '__main__':
-    tcp()
+    udp()

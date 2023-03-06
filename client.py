@@ -38,5 +38,28 @@ def tcp():
         print("Message counter: %d" % message_counter)
         print("Bytes counter: %d" % bytes_sent_coutner)
 
+def udp():
+    # create a socket, get the local host, and bind
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host = socket.gethostname()
+    client_socket.bind((host, 65432))
+
+    elapsed = 0
+    with open("byte_file", "rb") as f:
+        while True:
+            # send chunk of data to the server
+            start = time.time()
+            data_chunk = f.read(CURRENT_MESSAGE_SIZE)
+            if not data_chunk:
+                break
+            client_socket.sendto(data_chunk, (host, 65430))
+            end = time.time()
+            elapsed += end - start
+            ACK, _ = client_socket.recvfrom(CURRENT_MESSAGE_SIZE)
+        
+        print("done")
+        client_socket.sendto("stop".encode(), (host, 65430))
+        client_socket.close()
+
 if __name__ == '__main__':
-    tcp()
+    udp()
