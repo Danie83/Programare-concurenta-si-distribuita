@@ -1,6 +1,7 @@
 import socket
 import time
 from configparser import ConfigParser
+import argparse
 
 config_object = ConfigParser()
 config_object.read("config.ini")
@@ -67,4 +68,19 @@ def udp():
         client_socket.close()
 
 if __name__ == '__main__':
-    udp()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-p', '--protocol',
+        default='tcp',
+        choices=['tcp', 'udp'],
+        help="""
+            Protocol type that is used to transmit data.
+        """
+    )
+    args = parser.parse_args()
+    config = vars(args)
+
+    if config['protocol'] == 'udp':
+        udp()
+    else:
+        tcp()
