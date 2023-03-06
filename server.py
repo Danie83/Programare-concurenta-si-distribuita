@@ -12,7 +12,6 @@ MESSAGE_SIZES = config_object["APPLICATIONSETUP"]["message_sizes"].split(" ")
 MESSAGE_SIZES = [int(x) for x in MESSAGE_SIZES]
 
 CURRENT_MESSAGE_SIZE = MESSAGE_SIZES[MESSAGE_SIZE_SELECTION]
-PROTOCOL_TYPE = config_object["APPLICATIONSETUP"]["protocol_type"]
 
 def tcp():
     # create a socket using the config protocol, get the local host, and connect
@@ -49,7 +48,7 @@ def handle_client(client_socket, address):
     client_socket.close()
     end = time.time()
     elapsed_time = end - start
-    print("Protocol used: %s" % PROTOCOL_TYPE)
+    print("Protocol used: TCP")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter)
     print("Total elapsed time: %d ms" % elapsed_time)
@@ -69,7 +68,7 @@ def udp():
         bytes_read_counter += len(data)
         server_socket.sendto("test".encode(), address)
 
-    print("Protocol used: %s" % PROTOCOL_TYPE)
+    print("Protocol used: UDP")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter) # includes "stop"
 
