@@ -59,6 +59,15 @@ def udp():
             bytes_sent_counter += len(data_chunk)
             elapsed += end - start
             ACK, _ = client_socket.recvfrom(CURRENT_MESSAGE_SIZE)
+            if ACK.decode() == "yes":
+                ACK = None
+                continue
+            while ACK is None:
+                start = time.time()
+                client_socket.sendto(data_chunk, (host, 65430))
+                end = time.time()
+                ACK, _ = client_socket.recvfrom(CURRENT_MESSAGE_SIZE)
+                elapsed += end - start
         
         print("Finished sening data.")
         print("Transmission time: %d" % elapsed)
