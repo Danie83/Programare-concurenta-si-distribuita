@@ -31,12 +31,11 @@ def tcp_s():
             break
         message_counter += 1
         bytes_read_counter += len(client_data)
-        client_socket.send("yes".encode())
 
     # closing the connection
     print("Closing connection: %s" % str(address))
     client_socket.close()
-    print("Protocol used: TCP")
+    print("Protocol used: TCP-S")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter)
 
@@ -57,16 +56,16 @@ def tcp_saw():
             break
         message_counter += 1
         bytes_read_counter += len(client_data)
-
+        client_socket.send("yes".encode())
 
     # closing the connection
     print("Closing connection: %s" % str(address))
     client_socket.close()
-    print("Protocol used: TCP")
+    print("Protocol used: TCP-SAW")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter)
 
-def udp_saw():
+def udp_s():
     # create a socket using the config protocol, get the local host, and bind
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     host = socket.gethostname()
@@ -81,9 +80,27 @@ def udp_saw():
         bytes_read_counter += len(data)
         server_socket.sendto("yes".encode(), address)
 
-    print("Protocol used: UDP")
+    print("Protocol used: UDP-SAW")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter) # includes "stop"
+
+def udp_saw():
+    # create a socket using the config protocol, get the local host, and bind
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host = socket.gethostname()
+    server_socket.bind((host, 65430))
+
+    message_counter, bytes_read_counter = 0, 0
+    while True:
+        data, address = server_socket.recvfrom(CURRENT_MESSAGE_SIZE)
+        if not data or (len(data) == 4 and data.decode() == "stop"):
+            break
+        message_counter += 1
+        bytes_read_counter += len(data)
+
+    print("Protocol used: UDP-S")
+    print("Messages Counter: %d" % message_counter)
+    print("Bytes Counter: %d" % bytes_read_counter)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -102,6 +119,8 @@ if __name__ == '__main__':
         udp_saw()
     elif config['protocol'] == 'tcp-s':
         tcp_s()
-    else:
+    elif config['protocol'] == 'tcp-saw':
         tcp_saw()
+    else:
+        udp_s()
     

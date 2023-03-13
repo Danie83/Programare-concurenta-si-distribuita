@@ -79,6 +79,35 @@ def tcp_saw():
     print("Message counter: %d" % message_counter)
     print("Bytes counter: %d" % bytes_sent_counter)
 
+def udp_s():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host = socket.gethostname()
+    client_socket.bind((host, 65432))
+
+    start = time.time()
+    elapsed = 0
+    ACK = None
+    with open("byte_file", "rb") as f:
+        message_counter, bytes_sent_counter = 0, 0
+        while True:
+            # send chunk of data to the server
+            data_chunk = f.read(CURRENT_MESSAGE_SIZE)
+            if not data_chunk:
+                break
+            client_socket.sendto(data_chunk, (host, 65430))
+            message_counter += 1
+            bytes_sent_counter += len(data_chunk)
+            elapsed += end - start
+    end = time.time()
+    elapsed = end - start
+        
+    print("Finished sening data.")
+    print("Transmission time: %d" % elapsed)
+    print("Messages count: %d" % message_counter)
+    print("Bytes sent: %d" % bytes_sent_counter)
+    client_socket.sendto("stop".encode(), (host, 65430))
+    client_socket.close()
+
 #stop and wait
 def udp_saw():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -131,5 +160,9 @@ if __name__ == '__main__':
 
     if config['protocol'] == 'udp-saw':
         udp_saw()
-    else:
+    elif config['protocol'] == 'tcp-s':
         tcp_s()
+    elif config['protocol'] == 'tcp-saw':
+        tcp_saw()
+    else:
+        udp_s()
