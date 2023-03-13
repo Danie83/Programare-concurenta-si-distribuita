@@ -21,11 +21,36 @@ def tcp_s():
     server_socket.bind((host, 65432))
 
     # accepts a queue of n size, n is the max number of connections that can be queued
-    server_socket.listen(5)
+    server_socket.listen(1)
 
     client_socket, address = server_socket.accept()
     message_counter, bytes_read_counter = 0, 0
-    start = time.time()
+    while True:
+        client_data = client_socket.recv(CURRENT_MESSAGE_SIZE)
+        if not client_data or (len(client_data) == 4 and client_data.decode() == "stop"):
+            break
+        message_counter += 1
+        bytes_read_counter += len(client_data)
+        client_socket.send("yes".encode())
+
+    # closing the connection
+    print("Closing connection: %s" % str(address))
+    client_socket.close()
+    print("Protocol used: TCP")
+    print("Messages Counter: %d" % message_counter)
+    print("Bytes Counter: %d" % bytes_read_counter)
+
+def tcp_saw():
+    # create a socket using the config protocol, get the local host, and connect
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    host = socket.gethostname()
+    server_socket.bind((host, 65432))
+
+    # accepts a queue of n size, n is the max number of connections that can be queued
+    server_socket.listen(1)
+
+    client_socket, address = server_socket.accept()
+    message_counter, bytes_read_counter = 0, 0
     while True:
         client_data = client_socket.recv(CURRENT_MESSAGE_SIZE)
         if not client_data or (len(client_data) == 4 and client_data.decode() == "stop"):
@@ -33,15 +58,13 @@ def tcp_s():
         message_counter += 1
         bytes_read_counter += len(client_data)
 
+
     # closing the connection
     print("Closing connection: %s" % str(address))
     client_socket.close()
-    end = time.time()
-    elapsed_time = end - start
     print("Protocol used: TCP")
     print("Messages Counter: %d" % message_counter)
     print("Bytes Counter: %d" % bytes_read_counter)
-    print("Total elapsed time: %d ms" % elapsed_time)
 
 def udp_saw():
     # create a socket using the config protocol, get the local host, and bind
@@ -67,7 +90,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-p', '--protocol',
         default='tcp-s',
-        choices=['tcp-s', 'udp-saw'],
+        choices=['tcp-s', 'udp-saw', 'tcp-saw'],
         help="""
             Protocol type that is used to transmit data.
         """
@@ -75,8 +98,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config = vars(args)
 
-    if config['protocol'] == 'udp_saw':
+    if config['protocol'] == 'udp-saw':
         udp_saw()
-    else:
+    elif config['protocol'] == 'tcp-s':
         tcp_s()
+    else:
+        tcp_saw()
     
