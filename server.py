@@ -97,6 +97,7 @@ def udp_saw():
             break
         message_counter += 1
         bytes_read_counter += len(data)
+        server_socket.sendto("yes".encode(), address)
 
     print("Protocol used: UDP-S")
     print("Messages Counter: %d" % message_counter)

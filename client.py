@@ -100,7 +100,7 @@ def udp_s():
     end = time.time()
     elapsed = end - start
         
-    print("Finished sening data.")
+    print("Finished sending data.")
     print("Transmission time: %d" % elapsed)
     print("Messages count: %d" % message_counter)
     print("Bytes sent: %d" % bytes_sent_counter)
