@@ -107,7 +107,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-p', '--protocol',
         default='tcp-s',
-        choices=['tcp-s', 'udp-saw', 'tcp-saw'],
+        choices=['tcp-s', 'udp-saw', 'tcp-saw', 'udp-s'],
         help="""
             Protocol type that is used to transmit data.
         """

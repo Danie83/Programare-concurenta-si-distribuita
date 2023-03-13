@@ -97,7 +97,6 @@ def udp_s():
             client_socket.sendto(data_chunk, (host, 65430))
             message_counter += 1
             bytes_sent_counter += len(data_chunk)
-            elapsed += end - start
     end = time.time()
     elapsed = end - start
         
@@ -127,7 +126,6 @@ def udp_saw():
             client_socket.sendto(data_chunk, (host, 65430))
             message_counter += 1
             bytes_sent_counter += len(data_chunk)
-            elapsed += end - start
             ACK, _ = client_socket.recvfrom(CURRENT_MESSAGE_SIZE)
             if ACK.decode() == "yes":
                 ACK = None
@@ -150,7 +148,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-p', '--protocol',
         default='tcp-s',
-        choices=['tcp-s', 'udp-saw', 'tcp-saw'],
+        choices=['tcp-s', 'udp-saw', 'tcp-saw', 'udp-s'],
         help="""
             Protocol type that is used to transmit data.
         """
