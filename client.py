@@ -12,7 +12,8 @@ MESSAGE_SIZES = [int(x) for x in MESSAGE_SIZES]
 
 CURRENT_MESSAGE_SIZE = MESSAGE_SIZES[MESSAGE_SIZE_SELECTION]
 
-def tcp():
+#streaming
+def tcp_s():
     # create a socket, get the local host, and connect
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = socket.gethostname()
@@ -33,13 +34,15 @@ def tcp():
             bytes_sent_counter += len(data_chunk)
 
         # closing the connection
+        client_socket.send("stop".encode())
         client_socket.close()
         print("Connection terminated.")
         print("Total transamission time: %d" % elapsed)
         print("Message counter: %d" % message_counter)
         print("Bytes counter: %d" % bytes_sent_counter)
 
-def udp():
+#stop and wait
+def udp_saw():
     # create a socket, get the local host, and bind
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     host = socket.gethostname()
@@ -80,8 +83,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-p', '--protocol',
-        default='tcp',
-        choices=['tcp', 'udp'],
+        default='tcp-s',
+        choices=['tcp-s', 'udp-saw'],
         help="""
             Protocol type that is used to transmit data.
         """
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config = vars(args)
 
-    if config['protocol'] == 'udp':
-        udp()
+    if config['protocol'] == 'udp-saw':
+        udp_saw()
     else:
-        tcp()
+        tcp_s()

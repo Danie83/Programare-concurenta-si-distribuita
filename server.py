@@ -13,7 +13,8 @@ MESSAGE_SIZES = [int(x) for x in MESSAGE_SIZES]
 
 CURRENT_MESSAGE_SIZE = MESSAGE_SIZES[MESSAGE_SIZE_SELECTION]
 
-def tcp():
+# streaming
+def tcp_s():
     # create a socket using the config protocol, get the local host, and connect
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = socket.gethostname()
@@ -22,23 +23,12 @@ def tcp():
     # accepts a queue of n size, n is the max number of connections that can be queued
     server_socket.listen(5)
 
-    while True:
-        # waiting for client to connect
-        print("Waiting for connections...")
-        client_socket, address = server_socket.accept()
-
-        # handle clients on separate threads, each client is handled separately
-        thread = threading.Thread(target=handle_client, args=(client_socket, address))
-        thread.start()
-
-# method for handling the client message
-def handle_client(client_socket, address):
+    client_socket, address = server_socket.accept()
     message_counter, bytes_read_counter = 0, 0
     start = time.time()
     while True:
         client_data = client_socket.recv(CURRENT_MESSAGE_SIZE)
-
-        if not client_data:
+        if not client_data or (len(client_data) == 4 and client_data.decode() == "stop"):
             break
         message_counter += 1
         bytes_read_counter += len(client_data)
@@ -53,7 +43,7 @@ def handle_client(client_socket, address):
     print("Bytes Counter: %d" % bytes_read_counter)
     print("Total elapsed time: %d ms" % elapsed_time)
 
-def udp():
+def udp_saw():
     # create a socket using the config protocol, get the local host, and bind
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     host = socket.gethostname()
@@ -76,8 +66,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-p', '--protocol',
-        default='tcp',
-        choices=['tcp', 'udp'],
+        default='tcp-s',
+        choices=['tcp-s', 'udp-saw'],
         help="""
             Protocol type that is used to transmit data.
         """
@@ -85,8 +75,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     config = vars(args)
 
-    if config['protocol'] == 'udp':
-        udp()
+    if config['protocol'] == 'udp_saw':
+        udp_saw()
     else:
-        tcp()
+        tcp_s()
     
