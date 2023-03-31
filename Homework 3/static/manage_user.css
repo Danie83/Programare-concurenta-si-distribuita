@@ -1,0 +1,47 @@
+.center {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #F39C12;
+}
+
+.btn-primary {
+    background-color: #3498DB;
+    border-color: #3498DB;
+}
+
+.btn-primary:hover {
+    background-color: #2980B9;
+    border-color: #2980B9;
+}
+
+.btn-danger {
+    background-color: #E74C3C;
+    border-color: #E74C3C;
+}
+
+.btn-danger:hover {
+    background-color: #C0392B;
+    border-color: #C0392B;
+}
+
+.btn-warning {
+    background-color: #F39C12;
+    border-color: #F39C12;
+}
+
+.btn-warning:hover {
+    background-color: #D35400;
+    border-color: #D35400;
+}
