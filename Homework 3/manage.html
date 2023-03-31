@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Table Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./static/bootstrap.min.400.css" rel="stylesheet">
+    <link href="./static/manage.css" rel="stylesheet">
+    <script src="./static/bootstrap.min.400.js"></script>
+    <script src="./static/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 center">
+                <h2>Balance Information</h2>
+            </div>
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="w-75">Email</th>
+                    <th class="w-20">Balance</th>
+                    <th class="w-5 small-column">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>john@example.com</td>
+                    <td>$100</td>
+                    <td><button type="button" class="btn btn-primary">Manage</button></td>
+                </tr>
+                <tr>
+                    <td>jane@example.com</td>
+                    <td>$200</td>
+                    <td><button type="button" class="btn btn-primary">Manage</button></td>
+                </tr>
+                <tr>
+                    <td>bob@example.com</td>
+                    <td>$50</td>
+                    <td><button type="button" class="btn btn-primary">Manage</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+.center {
+    text-align: center;
+}
+
+.table {
+    font-size: 14px;
+}
+
+th,
+td {
+    vertical-align: middle;
+    font-size: 18px;
+}
+
+.small-column {
+    width: 1%;
+}
